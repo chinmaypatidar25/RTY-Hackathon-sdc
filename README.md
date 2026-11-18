@@ -118,11 +118,48 @@ See [RULES.md](RULES.md) for the full list.
 
 ## Your project
 
-_Replace this section with your project README:_
-- **Team:**
-- **Track:**
-- **Problem:** who faces it and why it happens
-- **What we built:** the core workflow
-- **The hardest part:** how we solved it
-- **How to run it:**
-- **Demo / screenshots:**
+### DealLens AI — Underwrite property deals with evidence, not hype
+
+**Team:** DealLens (Chinmay Patidar — @chinmaypatidar25)  
+**Track:** Build in Your Area of Expertise (`area-of-expertise`)
+
+**Problem:** First-time and independent real-estate investors often rely on broker-advertised yields, incomplete listings and uncertain expense assumptions. A property can be pitched as an "8% ROI" opportunity even when its stated rent supports only a 3.75% gross rental yield. Existing research workflows split the listing, spreadsheet calculations, and legal due-diligence checklist across different tools.
+
+**What we built:** A working property deal analyzer that accepts property details or pasted listing text, optionally uses an OpenAI model to extract the facts, calculates returns from explicit financial inputs, compares claimed versus calculated gross yields, runs conservative/base/upside scenarios, highlights document gaps, and exports a preliminary investor memo. Two clearly labeled illustrative sample deals are included so judges can test the workflow without an API key.
+
+**Hardest part:** Keeping AI-extracted claims separate from deterministic financial calculations. All annual rental yields, vacancy adjustments, ownership expenses and scenario returns are calculated in JavaScript from user-visible inputs. The model only extracts facts. Missing data remains missing; RERA, ownership and approvals are never treated as independently verified.
+
+### Run locally
+
+```bash
+npm install
+npm run dev
+```
+
+Open [http://localhost:3000](http://localhost:3000). No API key is required to run the sample analysis or use the basic listing text extractor.
+
+To enable OpenAI fact extraction, copy `.env.example` to `.env.local`, set `OPENAI_API_KEY`, and restart the dev server. The key is only used on the server.
+
+### Demo (90 seconds)
+
+1. Click **Residential apartment** in the sidebar. It has an illustrative ₹80 lakh asking price, ₹25,000 monthly rent, and **8% advertised yield**.
+2. Show that the app calculates a **3.75% gross rental yield**, a 4.25 percentage-point mismatch, and a lower net yield after user-entered expenses and vacancy.
+3. Explain the difference between **claims**, **calculated facts**, and **unverified documents**.
+4. Switch to **Industrial warehouse** to show a contrasting scenario, and tweak rent or price to recalculate.
+5. Export the memo, or paste a listing to extract values for review before calculating.
+
+### Technical stack
+
+- Next.js App Router / React with a custom responsive CSS interface
+- `lib/analyze.js`: deterministic rental underwriting, red flags, scenarios
+- `app/api/extract/route.js`: server-side optional OpenAI extraction, regex fallback
+- `app/page.jsx`: property intake, report, demo scenarios and memo export
+
+### Limitations / honest disclosures
+
+- No live property market comps or automatic registry verification; users must supply assumptions and verify all documents independently.
+- This is **not** professional investment, legal, tax, or financial advice.
+- The listing uploader supports `.txt` and `.md` documents; paste extracted PDF text manually.
+- Returns exclude loan servicing, income tax, capital gains, appreciation and transaction-specific taxes beyond entered costs.
+- Sample properties are illustrative; they are not verified live listings.
+
