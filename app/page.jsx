@@ -1,6 +1,7 @@
 "use client";
 import { useMemo, useState } from "react";
 import { assess, samples, INR, pct } from "../lib/analyze";
+import AgentPanel from "../components/AgentPanel";
 import { ArrowUpRight, Building2, CheckCircle2, AlertTriangle, FileSearch, ShieldAlert, BarChart3, MapPin, Sparkles, Download, RotateCcw, UploadCloud, LoaderCircle, LockKeyhole, ArrowRight } from "lucide-react";
 const blank = {name:"",location:"",assetType:"Residential apartment",price:"",area:"",monthlyRent:"",advertisedYield:"",closingCosts:"",annualExpenses:"",vacancyRate:5,notes:"",rera:"",titleVerified:false,approvalsVerified:false};
 function moneyField(label,key,unit="₹",deal,setDeal){return <label className="field"><span>{label}</span><div className="inputwrap"><i>{unit}</i><input type="number" min="0" placeholder="0" value={deal[key]} onChange={e=>setDeal(d=>({...d,[key]:e.target.value}))}/></div></label>}
@@ -34,6 +35,6 @@ export default function Home(){
  {moneyField("Asking price","price","₹",deal,setDeal)}{moneyField("Monthly rent","monthlyRent","₹",deal,setDeal)}{moneyField("Floor / plot area","area","sq ft",deal,setDeal)}{moneyField("Advertised annual yield","advertisedYield","%",deal,setDeal)}{moneyField("Stamp duty + other closing costs","closingCosts","₹",deal,setDeal)}{moneyField("Annual ownership expenses","annualExpenses","₹",deal,setDeal)}{moneyField("Expected vacancy rate","vacancyRate","%",deal,setDeal)}
  <label className="field"><span>RERA number (if applicable)</span><input value={deal.rera||""} onChange={e=>set("rera",e.target.value)} placeholder="Not verified"/></label></div>
  <div className="verify"><label><input type="checkbox" checked={!!deal.titleVerified} onChange={e=>set("titleVerified",e.target.checked)}/> Title independently verified</label><label><input type="checkbox" checked={!!deal.approvalsVerified} onChange={e=>set("approvalsVerified",e.target.checked)}/> Approvals independently verified</label></div><button className="primary" onClick={analyze}>Analyze this deal <ArrowRight size={17}/></button>{message&&<p className="notice">{message}</p>}</div></section>
- <section className="resultpanel"><div className="panel-title"><div><span className="step">02</span><h2>Investment intelligence</h2></div><span className="status"><span/> READY</span></div><Outcome report={report} deal={reportDeal}/></section></div>
+ <section className="resultpanel"><div className="panel-title"><div><span className="step">02</span><h2>Investment intelligence</h2></div><span className="status"><span/> READY</span></div><Outcome report={report} deal={reportDeal}/><AgentPanel key={JSON.stringify(reportDeal)} deal={reportDeal}/></section></div>
  <footer><span>DEALLENS AI © 2026</span><span>Built for the Masters' Union Buildathon · Independent analysis, not financial advice</span></footer></div></main></div>
 }
