@@ -131,10 +131,20 @@ See [RULES.md](RULES.md) for the full list.
 
 ### Run locally
 
+**Windows one-click launch:** Open the cloned repository folder in File Explorer and double-click `Start-DealLens.bat`. The launcher checks Node.js, installs dependencies if necessary, finds an available port, waits for `/api/health` to respond, and opens the URL in your normal Windows browser. Leave the new server terminal open while presenting.
+
+**Manual alternative:**
+
 ```bash
 npm install
 npm run dev
 ```
+
+If you edited this project on GitHub after cloning it, run `git pull origin main` first to receive the latest code.
+
+**Important:** `localhost` is accessible only on the computer running Next.js. Do not open the link inside ChatGPT's remote/in-app browser: use your Windows Chrome or Edge browser. If the terminal shows port 3001 or another port, use the actual URL printed in the terminal. You can check that the app server is alive at `http://127.0.0.1:3000/api/health` (adjust the port if needed).
+
+**Troubleshooting:** If the one-click launcher shows an error, leave the console open and inspect its message. Install Node.js 20.9+ LTS if `node` or `npm` cannot be found. Run `npm test` and `npm run build` for additional validation. `Start-DealLens.ps1` is the PowerShell implementation invoked by the .bat file.
 
 Open [http://localhost:3000](http://localhost:3000). No API key is required to run the sample analysis or use the basic listing text extractor.
 
