@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>DealLens AI — Offline Demo</title>
+<style>
+:root{color-scheme:light;--ink:#183025;--green:#215b3b;--soft:#eaf3e9;--line:#e0e8df;--muted:#77887a}
+*{box-sizing:border-box}body{margin:0;background:#f3f6f1;color:var(--ink);font:14px/1.5 system-ui,-apple-system,Segoe UI,sans-serif}
+button,input,select{font:inherit}button{cursor:pointer}button:disabled{opacity:.5}main{max-width:1250px;margin:auto;padding:32px 25px}
+header{background:#183a28;color:white;padding:18px 35px;display:flex;justify-content:space-between;gap:12px;align-items:center}
+header b{font-size:24px;letter-spacing:-1.3px}header em{color:#b5e2b5;font-style:normal}.pill{border:1px solid #527c5c;color:#d5efcf;border-radius:99px;padding:7px 11px;font-size:11px}
+h1{font-size:clamp(28px,4vw,45px);letter-spacing:-1.9px;line-height:1.16;margin:12px 0}h1 span{color:#41835a}
+.kicker{font-size:11px;font-weight:800;letter-spacing:1.5px;color:#4b8758}
+.intro{color:#6e8374;max-width:740px;margin-bottom:25px}
+.grid{display:grid;grid-template-columns:minmax(320px,.9fr) minmax(420px,1.3fr);gap:19px}
+.panel{background:white;border:1px solid var(--line);border-radius:14px;overflow:hidden;box-shadow:0 2px 22px #173a1c08}
+.panel-title{border-bottom:1px solid #e8efe5;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:20px}
+.panel-title b{font-size:16px}.panel-body{padding:20px}
+.sample-buttons{display:flex;flex-wrap:wrap;gap:9px;margin-bottom:17px}
+button.sample{border:1px solid #d9e7d7;background:#f7faf6;border-radius:8px;padding:9px 12px;color:#315e3c;font-size:12px;font-weight:650}
+.fields{display:grid;grid-template-columns:1fr 1fr;gap:12px}label{display:block;font-size:11px;color:#526957;font-weight:750;min-width:0}
+label.full{grid-column:span 2}input{width:100%;padding:11px 10px;border:1px solid #d7e3d5;border-radius:8px;margin-top:6px;color:#183025;background:white}
+input:focus{outline:2px solid #92c69c;outline-offset:0}
+button.primary{width:100%;margin-top:19px;background:var(--green);color:white;border:0;border-radius:8px;padding:13px;font-weight:800}
+.muted{color:var(--muted);font-size:11px}
+.hero-result{background:#eff6ec;border:1px solid #d9e8d3;border-radius:11px;padding:17px;margin-bottom:14px}
+.hero-result small{font-size:10px;color:#63906a;letter-spacing:1px;font-weight:800}.hero-result h2{font-size:21px;letter-spacing:-.7px;margin:6px 0}
+.hero-result p{margin:0;color:#667f69;font-size:12px}
+.metrics{display:grid;grid-template-columns:repeat(2,1fr);gap:11px}.metric{border:1px solid #e5eae3;padding:15px;border-radius:9px}.metric span{display:block;color:#829082;font-size:11px}.metric strong{display:block;font-size:24px;margin:5px 0}.metric small{font-size:10px;color:#a0a9a1}
+.claim{border:1px solid #f0dfc8;background:#fff8ef;border-radius:10px;margin:16px 0;padding:15px}.claim.ok{background:#eff9ef;border-color:#dcecd9}
+.claim b{font-size:14px}.claim p{font-size:11px;color:#846d50;margin:6px 0 0}.claim.ok p{color:#597c5f}
+h3{font-size:14px;margin:20px 0 10px}.scenarios{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}.scenario{background:#f5f8f3;border:1px solid #e5eee2;border-radius:9px;padding:13px}
+.scenario span{font-size:11px;color:#748a75}.scenario strong{display:block;font-size:21px;margin:6px 0}.scenario small{font-size:10px;color:#98a697}
+.flags{padding:0;margin:8px 0 18px;list-style:none}.flags li{border-top:1px solid #edf1eb;padding:10px 0;font-size:12px}.flags li:before{content:"!";display:inline-grid;place-items:center;color:#b2693b;background:#fdf0df;border-radius:50%;width:19px;height:19px;font-weight:900;margin-right:8px}
+.agent{border:1px solid #d6e7d8;background:#f7fbf6;border-radius:11px;padding:15px;margin-top:18px}.agent .heading{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:9px}
+.agent .heading b{font-size:15px}.agent .heading span{font-size:10px;color:#4a8157;font-weight:800}.agent p{color:#67806b;font-size:11px;margin:0 0 12px}
+.agent select{width:100%;padding:10px;border:1px solid #dae7da;background:white;border-radius:8px;color:#34533b}
+.agent pre{white-space:pre-wrap;word-break:break-word;font:12px/1.65 system-ui;color:#344f3b;margin:13px 0 0;background:#fff;border:1px solid #e0eadf;border-radius:8px;padding:13px}
+.trace{border-top:1px solid #dfebdd;padding-top:10px;margin-top:12px}.trace summary{cursor:pointer;color:#3c7550;font-size:11px;font-weight:800}.trace code{display:block;white-space:pre-wrap;word-break:break-word;background:#f1f6ef;margin-top:8px;padding:10px;font-size:10px}
+.report-actions{display:flex;gap:8px;justify-content:flex-end}.outline{border:1px solid #cde2d2;background:#fff;color:#31583f;padding:8px 10px;border-radius:8px;font-weight:700;font-size:11px}
+.disclaimer{border-top:1px solid #e4ede3;padding-top:14px;font-size:10px;color:#9baba0;margin-top:20px;line-height:1.6}
+footer{padding:25px 0;color:#849688;font-size:11px;display:flex;gap:10px;justify-content:space-between}
+@media(max-width:850px){.grid{grid-template-columns:1fr}header{padding:16px 20px}main{padding:24px 14px}.panel-body{padding:15px}}
+@media(max-width:460px){.scenarios{grid-template-columns:1fr 1fr}.metrics{gap:8px}.metric strong{font-size:19px}}
+</style>
+</head>
+<body>
+<header><b>deallens<em>AI</em></b><div class="pill">OFFLINE HACKATHON DEMO</div></header>
+<main>
+<div class="kicker">REAL ESTATE · DEAL INTELLIGENCE</div>
+<h1>Every property has a story.<br><span>Find the numbers behind it.</span></h1>
+<p class="intro">Test advertised yields, simulate rental cash flow, and uncover what hasn't been verified. This backup runs entirely in your browser—no installation, internet, or API key needed.</p>
+<div class="grid">
+<section class="panel">
+<div class="panel-title"><b>01 / Enter the property</b><span class="muted">Editable assumptions</span></div>
+<div class="panel-body">
+<div class="sample-buttons"><button class="sample" onclick="loadSample(0)">Bhopal apartment</button><button class="sample" onclick="loadSample(1)">Mandideep warehouse</button></div>
+<div class="fields">
+<label class="full">Property name<input id="name" type="text" maxlength="140"></label>
+<label class="full">Location<input id="location" type="text" maxlength="140"></label>
+<label>Purchase price (₹)<input id="price" type="number" min="0"></label>
+<label>Monthly rent (₹)<input id="rent" type="number" min="0"></label>
+<label>Area (sq ft)<input id="area" type="number" min="0"></label>
+<label>Advertised yield (%)<input id="advertised" type="number" min="0" step=".1"></label>
+<label>One-time closing costs (₹)<input id="costs" type="number" min="0"></label>
+<label>Annual ownership costs (₹)<input id="expenses" type="number" min="0"></label>
+<label>Vacancy assumption (%)<input id="vacancy" type="number" min="0" max="100"></label>
+</div>
+<button class="primary" onclick="calculate()">Analyze this investment →</button>
+<p class="muted">All inputs are illustrative and editable. No brokerage listing is being verified.</p>
+</div>
+</section>
+<section class="panel">
+<div class="panel-title"><b>02 / Investment research report</b><div class="report-actions"><button class="outline" onclick="exportMemo()">Export memo</button></div></div>
+<div class="panel-body">
+<div class="hero-result"><small>PRELIMINARY ASSESSMENT</small><h2 id="verdict">Investigate before investing</h2><p id="subheading"></p></div>
+<div class="metrics">
+<div class="metric"><span>Asking price</span><strong id="metric-price">—</strong><small>From input</small></div>
+<div class="metric"><span>Gross annual yield</span><strong id="metric-gross">—</strong><small>12 × rent ÷ price</small></div>
+<div class="metric"><span>Net annual yield</span><strong id="metric-net">—</strong><small>Includes expenses and vacancy</small></div>
+<div class="metric"><span>Annual net income</span><strong id="metric-income">—</strong><small>Before financing and income tax</small></div>
+</div>
+<div class="claim" id="claim"><b id="claim-title"></b><p id="claim-note"></p></div>
+<h3>Stress-test scenarios</h3><div class="scenarios" id="scenarios"></div>
+<h3>Risk and documentation flags</h3><ul class="flags" id="flags"></ul>
+<div class="agent">
+<div class="heading"><b>✳ Research assistant</b><span>DETERMINISTIC BACKUP</span></div>
+<p>Ask a question. The assistant checks the exact financial and risk-analysis outputs displayed above.</p>
+<select id="question"><option>Is the broker's advertised yield misleading?</option><option>How much does downside risk affect returns?</option><option>What must I verify before investing?</option></select>
+<button class="primary" onclick="askAgent()">Analyze question →</button>
+<pre id="answer">Choose a question and run the assistant.</pre>
+<details class="trace"><summary>View tool calculation trace</summary><code id="trace"></code></details>
+</div>
+<div class="disclaimer">Offline fallback with verified arithmetic, not an AI model. No access to RERA, land records, live comparables or government approvals. Not legal, tax or investment advice.</div>
+</div>
+</section>
+</div>
+<footer><span>DEALLENS AI © 2026</span><span>Hackathon backup • Works offline</span></footer>
+</main>
+<script>
+const samples=[
+{name:"Bhopal apartment · Advertised 8%",location:"Hoshangabad Road, Bhopal",price:8000000,rent:25000,area:1400,advertised:8,costs:550000,expenses:36000,vacancy:5},
+{name:"Industrial warehouse",location:"Mandideep, Madhya Pradesh",price:18000000,rent:105000,area:6000,advertised:7,costs:1100000,expenses:175000,vacancy:5}
+];
+const fields=["name","location","price","rent","area","advertised","costs","expenses","vacancy"];
+let report=null;
+const el=id=>document.getElementById(id);
+const val=id=>{const n=Number(el(id).value);return Number.isFinite(n)&&n>=0?n:0};
+const money=n=>Number.isFinite(n)?new Intl.NumberFormat("en-IN",{style:"currency",currency:"INR",maximumFractionDigits:0}).format(n):"—";
+const pct=n=>Number.isFinite(n)?n.toFixed(2)+"%":"—";
+function loadSample(index){const d=samples[index];for(const key of fields)el(key).value=d[key];calculate()}
+function calculate(){
+ const price=val("price"),rent=val("rent"),area=val("area"),advertised=val("advertised"),costs=val("costs"),expenses=val("expenses"),vacancy=Math.max(0,Math.min(100,val("vacancy")));
+ const gross=price&&rent?rent*12/price*100:null;
+ const net=price&&rent?(rent*12*(1-vacancy/100)-expenses)/(price+costs)*100:null;
+ const netIncome=price&&rent?rent*12*(1-vacancy/100)-expenses:null;
+ const gap=advertised&&gross!==null?advertised-gross:null;
+ const risks=[];
+ if(!price||!rent)risks.push("Missing price or rental information");
+ if(gap!==null&&gap>0.5)risks.push("Advertised yield exceeds calculated gross rental yield by "+gap.toFixed(2)+" percentage points");
+ risks.push("Ownership, title and encumbrance documents not independently checked");
+ risks.push("Planning approvals and applicable RERA details not independently checked");
+ risks.push("Independent comparable sale and rent evidence not supplied");
+ const scenarios=[
+ {name:"Conservative",factor:.85,vacancy:Math.min(100,vacancy+8),expense:1.15},
+ {name:"Base case",factor:1,vacancy,expense:1},
+ {name:"Upside",factor:1.1,vacancy:Math.max(0,vacancy-3),expense:1}
+ ].map(x=>({name:x.name,yield:price&&rent?(rent*x.factor*12*(1-x.vacancy/100)-expenses*x.expense)/(price+costs)*100:null}));
+ report={name:el("name").value,location:el("location").value,price,rent,area,advertised,costs,expenses,vacancy,gross,net,netIncome,gap,risks,scenarios};
+ el("verdict").textContent=!price||!rent?"Insufficient data":"Investigate before investing";
+ el("subheading").textContent=(report.location||"Location not supplied")+" · Estimated returns based on your assumptions";
+ el("metric-price").textContent=price?money(price):"Missing";el("metric-gross").textContent=pct(gross);el("metric-net").textContent=pct(net);el("metric-income").textContent=netIncome===null?"—":money(netIncome);
+ el("claim").className="claim"+(gap!==null&&gap<=.5?" ok":"");
+ el("claim-title").textContent=gap===null?"Advertised yield cannot be checked":("Claimed "+pct(advertised)+" vs calculated "+pct(gross)+" gross");
+ el("claim-note").textContent=gap===null?"Enter the advertised yield, purchase price and monthly rent.":gap>.5?"Claim exceeds the calculated gross rental yield by "+gap.toFixed(2)+" percentage points. Ask for supporting evidence.":"Broker claim and calculated gross yield are within 0.5 percentage points.";
+ el("scenarios").replaceChildren(...scenarios.map(x=>{const e=document.createElement("div");e.className="scenario";e.innerHTML="<span></span><strong></strong><small>estimated net yield</small>";e.querySelector("span").textContent=x.name;e.querySelector("strong").textContent=pct(x.yield);return e}));
+ el("flags").replaceChildren(...risks.map(x=>{const e=document.createElement("li");e.textContent=x;return e}));
+ el("trace").textContent=JSON.stringify({underwrite:{grossYieldPercent:gross,netYieldPercent:net,annualNetIncomeINR:netIncome},stress_test:scenarios,audit:{advertisedYield:advertised,gapPercentagePoints:gap,risks}},null,2);
+ el("answer").textContent="Choose a question and run the assistant.";
+}
+function askAgent(){
+ if(!report)calculate();
+ const r=report,q=el("question").selectedIndex;
+ let answer;
+ if(q===0)answer=r.gap===null?"Insufficient information to compare the broker claim.":("Advertised annual yield: "+pct(r.advertised)+". Calculated gross rental yield: "+pct(r.gross)+". Difference: "+r.gap.toFixed(2)+" percentage points. Based on the entered rent and asking price, the claim "+(r.gap>.5?"needs supporting evidence before it can be relied upon.":"is close to gross yield. Net yield may still be lower.") );
+ if(q===1)answer="Under the entered assumptions, base-case net yield is "+pct(r.scenarios[1].yield)+". With 15% lower rent, 8 percentage points higher vacancy and 15% higher expenses, conservative net yield becomes "+pct(r.scenarios[0].yield)+". These are sensitivities, not forecasts.";
+ if(q===2)answer="Before investing, verify the property's title and encumbrance history, applicable land use and permissions, RERA details where relevant, actual rent and lease evidence, and independently sourced comparable transactions. None are verified by this offline tool.";
+ el("answer").textContent=answer+"\n\nThis research summary is not an investment recommendation.";
+}
+function exportMemo(){
+ if(!report)calculate();
+ const r=report;
+ const lines=["DEALLENS AI — OFFLINE INVESTMENT MEMO","Property: "+r.name,"Location: "+r.location,"Asking price: "+money(r.price),"Monthly rent: "+money(r.rent),"Gross yield: "+pct(r.gross),"Net yield: "+pct(r.net),"Annual net income: "+(r.netIncome===null?"Unknown":money(r.netIncome)),"","RISK FLAGS:",...r.risks.map(x=>"- "+x),"","DISCLAIMER: Illustrative offline analysis only; no records independently verified."];
+ const file=new Blob([lines.join("\n")],{type:"text/plain"}),url=URL.createObjectURL(file),a=document.createElement("a");
+ a.href=url;a.download="deallens-investment-memo.txt";a.click();setTimeout(()=>URL.revokeObjectURL(url),2000);
+}
+loadSample(0);
+</script>
+</body>
+</html>
