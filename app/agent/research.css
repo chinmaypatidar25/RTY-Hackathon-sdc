@@ -3,6 +3,35 @@
   gap: 20px;
 }
 
+.project-chat-history:empty {
+  display: none;
+}
+
+.project-chat-history {
+  max-height: 360px;
+  overflow-y: auto;
+  margin-bottom: 12px;
+}
+
+.project-chat-turn {
+  margin-bottom: 12px;
+  line-height: 1.55;
+}
+
+.project-chat-question,
+.project-chat-answer {
+  padding: 10px 12px;
+  margin: 0 0 4px;
+  border-radius: 8px;
+  overflow-wrap: anywhere;
+}
+
+.project-chat-question { background: #ebf4ee; }
+.project-chat-answer { background: #f6f8f5; }
+.project-chat-answer p,
+.project-chat-answer ul { margin: 6px 0; }
+.project-chat-answer a { color: #22583c; text-decoration: underline; }
+
 .research-form fieldset,
 .research-columns {
   display: grid;

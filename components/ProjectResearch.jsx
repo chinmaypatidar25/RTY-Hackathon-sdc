@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Building2, FileSearch, LoaderCircle, ShieldCheck } from "lucide-react";
 import { INR } from "../lib/analyze.js";
+import ProjectChat from "./ProjectChat";
 
 function ResearchReport({report, onCompare}) {
   return <article className="agent-property-panel research-report" aria-label="Project case study" aria-live="polite">
@@ -114,6 +115,9 @@ export default function ProjectResearch() {
       <p className="research-meta">Current coverage includes Godrej Aristocrat, Sobha Crescent Phase 1 and DLF Privana South. Reports use reviewed public records.</p>
       {error && <p className="agent-error" role="alert">{error}</p>}
     </form>
-    {report && <ResearchReport report={report} onCompare={runResearch}/>}
+    {report && <>
+      <ProjectChat key={report.name} project={report}/>
+      <ResearchReport report={report} onCompare={runResearch}/>
+    </>}
   </section>;
 }

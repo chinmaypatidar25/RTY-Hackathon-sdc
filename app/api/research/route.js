@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { researchProject } from "../../../lib/project-research.js";
+import { answerProjectQuestion } from "../../../lib/project-chat.js";
 
 export async function POST(request) {
   const input = await request.json().catch(() => null);
@@ -15,5 +16,11 @@ export async function POST(request) {
       error:"This project and location don’t match our current Gurugram research. Check the project phase and sector, or try one of the projects below."
     }, {status:404});
   }
-  return NextResponse.json(report);
+  if (input.question === undefined) return NextResponse.json(report);
+
+  const question = typeof input.question === "string" ? input.question.trim() : "";
+  if (question.length < 3 || question.length > 1200) {
+    return NextResponse.json({error:"Enter a question between 3 and 1,200 characters."}, {status:400});
+  }
+  return NextResponse.json(answerProjectQuestion(report, question));
 }
