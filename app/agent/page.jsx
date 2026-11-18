@@ -20,7 +20,15 @@ export default function ResearchAgentPage(){
  const [status,setStatus]=useState(null);
  const [revision,setRevision]=useState(0);
  const snapshot=useMemo(()=>assess(property),[property]);
- useEffect(()=>{fetch("/api/agent/status",{cache:"no-store"}).then(x=>x.json()).then(setStatus).catch(()=>setStatus({mode:"unknown",message:"AI configuration status unavailable."}));},[]);
+ useEffect(()=>{
+  fetch("/api/agent/status",{cache:"no-store"})
+   .then(response=>{
+    if(!response.ok) throw new Error("Agent status is unavailable.");
+    return response.json();
+   })
+   .then(setStatus)
+   .catch(()=>setStatus({mode:"unknown"}));
+ },[]);
  const update=(key,value)=>{setProperty(old=>({...old,[key]:value}));setRevision(v=>v+1)};
  const selectSample=(i)=>{setProperty({...samples[i]});setListing("");setNotice("Illustrative example loaded. Ask the agent a question.");setRevision(v=>v+1)};
  async function extract(){
@@ -30,7 +38,9 @@ export default function ResearchAgentPage(){
    const response=await fetch("/api/extract",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({text:listing})});
    const data=await response.json();
    if(!response.ok)throw new Error(data.error||"Listing extraction failed");
-   setProperty(old=>({...old,...data.deal}));
+   // A pasted listing describes a new property. Start with blank property data
+   // so assumptions and verification claims from another deal cannot carry over.
+   setProperty({...empty,vacancyRate:"",...data.deal});
    setRevision(v=>v+1);
    setNotice(data.mode==="ai"?"AI extraction finished. Check every extracted field before asking the agent.":"Basic text extraction finished. Review the fields; this is not AI reasoning.");
   }catch(error){setNotice(error.message)}
@@ -50,7 +60,8 @@ export default function ResearchAgentPage(){
     <div className="agent-runtime" role="status">
      {status===null?<><LoaderCircle size={16} className="spin"/> Checking AI configuration…</>:
       status.mode==="ai-configured"?<><CheckCircle2 size={17}/> OpenAI API key configured — model-powered research enabled (subject to API availability).</>:
-      <><AlertTriangle size={17}/> <strong>Demo mode:</strong> No OpenAI API key. Calculations and fixed research summaries work, but this is not a live AI model.</>}
+      status.mode==="demo"?<><AlertTriangle size={17}/> <strong>Demo mode:</strong> Calculations and fixed research summaries are available. Add an OpenAI API key to enable model-powered answers.</>:
+      <><AlertTriangle size={17}/> AI configuration status unavailable. You can still try running the agent.</>}
     </div>
    </div>
    <div className="agent-workspace-grid">
