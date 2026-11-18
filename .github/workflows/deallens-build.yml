@@ -14,3 +14,27 @@ jobs:
       - run: npm install --no-audit --no-fund
       - run: npm test
       - run: npm run build
+      - name: Smoke test running app and research agent
+        shell: bash
+        run: |
+          set -euo pipefail
+          npm run start -- --port 3333 > /tmp/deallens-next.log 2>&1 &
+          SERVER_PID=$!
+          trap 'kill "$SERVER_PID" 2>/dev/null || true' EXIT
+          for i in {1..45}; do
+            if curl --silent --fail http://127.0.0.1:3333/api/health -o /tmp/deallens-health.json; then
+              break
+            fi
+            sleep 1
+          done
+          grep -q '"status":"ok"' /tmp/deallens-health.json
+          curl --fail --silent http://127.0.0.1:3333/ -o /tmp/deallens-home.html
+          grep -q 'Every property has a story' /tmp/deallens-home.html
+          curl --fail --silent -X POST http://127.0.0.1:3333/api/agent \
+            -H 'Content-Type: application/json' \
+            -d '{"question":"Is the advertised eight percent yield correct?","deal":{"name":"Bhopal apartment","price":8000000,"monthlyRent":25000,"advertisedYield":8,"annualExpenses":36000,"vacancyRate":5,"closingCosts":550000}}' \
+            | node -e "let b='';process.stdin.on('data',d=>b+=d);process.stdin.on('end',()=>{let a=JSON.parse(b);if(a.mode!=='demo'||a.steps?.length!==3||!a.answer.includes('3.75%'))process.exit(1);console.log('Agent runtime OK: three tools, correct 3.75% yield')})"
+          curl --fail --silent -X POST http://127.0.0.1:3333/api/extract \
+            -H 'Content-Type: application/json' \
+            -d '{"text":"Asking price ₹80 lakh. Monthly rent ₹25,000. 1400 sqft. Advertised yield 8%."}' \
+            | node -e "let b='';process.stdin.on('data',d=>b+=d);process.stdin.on('end',()=>{let a=JSON.parse(b);if(a.mode!=='fallback'||a.deal.price!==8000000||a.deal.monthlyRent!==25000)process.exit(1);console.log('Listing extraction runtime OK')})"
