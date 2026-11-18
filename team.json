@@ -1,9 +1,12 @@
 {
-  "team_name": "CHANGE_ME",
-  "project_title": "CHANGE_ME",
-  "one_liner": "CHANGE_ME: one sentence about what you're building",
-  "track": "CHANGE_ME: physical-world | ai-agents | area-of-expertise",
+  "team_name": "DealLens",
+  "project_title": "DealLens AI",
+  "one_liner": "Evidence-first real estate deal analysis that checks advertised rental returns against actual numbers and flags missing due diligence.",
+  "track": "area-of-expertise",
   "members": [
-    { "name": "CHANGE_ME", "github": "CHANGE_ME" }
+    {
+      "name": "Chinmay Patidar",
+      "github": "chinmaypatidar25"
+    }
   ]
 }
