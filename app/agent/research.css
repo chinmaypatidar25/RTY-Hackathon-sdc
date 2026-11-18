@@ -1,0 +1,133 @@
+.research-workspace {
+  display: grid;
+  gap: 20px;
+}
+
+.research-form fieldset,
+.research-columns {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.research-form fieldset {
+  border: 0;
+  margin: 0;
+  padding: 0;
+}
+
+.agent-standalone-label small,
+.research-meta,
+.research-calculator summary span {
+  color: #53675b;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+.research-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.research-actions .agent-extract-btn,
+.research-actions .agent-example-buttons {
+  margin: 0;
+}
+
+.research-actions .research-submit {
+  background: #235b3d;
+  color: white;
+  border-color: #235b3d;
+}
+
+.research-report {
+  display: grid;
+  gap: 20px;
+  line-height: 1.6;
+}
+
+.research-report h2,
+.research-report h3,
+.research-report p {
+  margin: 0 0 6px;
+}
+
+.research-report h3 svg {
+  vertical-align: text-bottom;
+}
+
+.research-report ul {
+  margin: 6px 0 0;
+  padding-left: 20px;
+}
+
+.research-report li + li {
+  margin-top: 6px;
+}
+
+.research-thesis,
+.research-options > div {
+  background: #eff5ee;
+  border: 1px solid #dce7dc;
+  border-radius: 10px;
+  padding: 14px;
+}
+
+.research-options {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.research-options > div {
+  display: grid;
+  justify-items: start;
+  gap: 3px;
+}
+
+.research-options button,
+.research-report a {
+  color: #22583c;
+  text-decoration: underline;
+}
+
+.research-options button {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  font-weight: 700;
+  text-align: left;
+}
+
+.research-calculator {
+  margin-top: 24px;
+}
+
+.research-calculator > summary {
+  background: white;
+  border: 1px solid #dce7dc;
+  border-radius: 12px;
+  padding: 16px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.research-calculator summary span {
+  margin-left: 8px;
+}
+
+.research-calculator-intro {
+  line-height: 1.6;
+}
+
+@media (max-width: 640px) {
+  .research-form fieldset,
+  .research-columns,
+  .research-options {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

@@ -4,16 +4,21 @@ import {useEffect,useMemo,useState} from "react";
 import {Bot,Building2,ArrowLeft,ArrowRight,ShieldCheck,Landmark,BarChart3,FileSearch,LoaderCircle,AlertTriangle,CheckCircle2,Sparkles} from "lucide-react";
 import {samples,assess,INR,pct} from "../../lib/analyze";
 import AgentPanel from "../../components/AgentPanel";
+import ProjectResearch from "../../components/ProjectResearch";
+import "./research.css";
 
-const empty={name:"",location:"",assetType:"Residential apartment",price:"",monthlyRent:"",area:"",advertisedYield:"",closingCosts:"",annualExpenses:"",vacancyRate:5,rera:"",titleVerified:false,approvalsVerified:false};
+const empty={name:"",location:"",assetType:"Residential apartment",price:"",monthlyRent:"",area:"",advertisedYield:"",closingCosts:"",annualExpenses:"",vacancyRate:"",rera:"",titleVerified:false,approvalsVerified:false};
 const numericFields=[
- ["price","Asking price (₹)"],["monthlyRent","Monthly rent (₹)"],
- ["area","Area (sq ft)"],["advertisedYield","Claimed annual yield (%)"],
- ["closingCosts","Closing costs (₹)"],["annualExpenses","Annual expenses (₹)"],
- ["vacancyRate","Vacancy assumption (%)"]
+ ["price","Seller’s quoted price (₹)","The amount the seller or builder wants for the unit, before extra purchase fees. For ₹2 crore, enter 20000000."],
+ ["monthlyRent","Expected rent per month (₹)","How much a tenant might pay you each month. For ₹60,000 per month, enter 60000."],
+ ["area","Carpet area (sq ft)","The carpet area shown in the project or sale documents. Use this same area basis when comparing prices per square foot."],
+ ["advertisedYield","Annual rental return claimed by the seller (%)","Enter 4 if the seller claims 4% annual rent relative to price. Leave blank if they gave no percentage."],
+ ["closingCosts","One-time purchase fees (₹)","The total for stamp duty, registration, brokerage and other purchase fees that are outside the quoted price."],
+ ["annualExpenses","Running costs per year (₹)","Add up what you expect to pay yearly for maintenance, property tax and repairs. For ₹5,000 a month, enter 60000."],
+ ["vacancyRate","Time without a tenant (%)","The share of a year you expect the unit to be empty. One empty month in a year is about 8.3%."]
 ];
 export default function ResearchAgentPage(){
- const [property,setProperty]=useState({...samples[0]});
+ const [property,setProperty]=useState({...empty});
  const [listing,setListing]=useState("");
  const [extracting,setExtracting]=useState(false);
  const [notice,setNotice]=useState("");
@@ -56,17 +61,21 @@ export default function ResearchAgentPage(){
    <div className="agent-page-intro">
     <div className="agent-kicker"><Sparkles size={16}/> YOUR RESEARCH WORKSPACE</div>
     <h1>Meet your real-estate <span>research agent.</span></h1>
-    <p>Select an example property, change the assumptions, and ask an investment question. View exactly what the agent calculated and which checks remain unverified.</p>
+    <p>Enter a project name and location to see the investment case, the risks and other projects to compare.</p>
+   </div>
+   <ProjectResearch/>
+   <details className="research-calculator">
+    <summary>Estimate rental returns <span>Optional · use your unit quote</span></summary>
+    <p className="research-calculator-intro">Enter the seller’s quote and estimated monthly rent to calculate returns. Blank purchase costs, running costs and vacancy count as zero and can make your estimate look higher.</p>
     <div className="agent-runtime" role="status">
      {status===null?<><LoaderCircle size={16} className="spin"/> Checking AI configuration…</>:
       status.mode==="ai-configured"?<><CheckCircle2 size={17}/> OpenAI API key configured — model-powered research enabled (subject to API availability).</>:
       status.mode==="demo"?<><AlertTriangle size={17}/> <strong>Demo mode:</strong> Calculations and fixed research summaries are available. Add an OpenAI API key to enable model-powered answers.</>:
       <><AlertTriangle size={17}/> AI configuration status unavailable. You can still try running the agent.</>}
     </div>
-   </div>
    <div className="agent-workspace-grid">
     <section className="agent-property-panel">
-     <div className="agent-section-title"><Landmark size={19}/><div><h2>Property to investigate</h2><p>These inputs determine what the agent can conclude.</p></div></div>
+     <div className="agent-section-title"><Landmark size={19}/><div><h2>Your specific unit</h2><p>Use the unit’s written quote and your own estimates. The examples below are for practice.</p></div></div>
      <div className="agent-example-buttons">
        <button type="button" onClick={()=>selectSample(0)}><Building2 size={16}/> Bhopal apartment</button>
        <button type="button" onClick={()=>selectSample(1)}><Building2 size={16}/> Mandideep warehouse</button>
@@ -79,15 +88,19 @@ export default function ResearchAgentPage(){
      <div className="agent-standalone-fields">
       <label className="agent-standalone-label full">Property name<input value={property.name||""} onChange={e=>update("name",e.target.value)} placeholder="Property name"/></label>
       <label className="agent-standalone-label full">Location<input value={property.location||""} onChange={e=>update("location",e.target.value)} placeholder="City, area"/></label>
-      {numericFields.map(([field,label])=><label className="agent-standalone-label" key={field}>{label}<input type="number" min="0" value={property[field]??""} onChange={e=>update(field,e.target.value)} /></label>)}
+      {numericFields.map(([field,label,help])=><label className="agent-standalone-label" key={field}>
+       {label}
+       <input type="number" min="0" max={field==="vacancyRate"?100:undefined} step="any" value={property[field]??""} onChange={e=>update(field,e.target.value)} />
+       <small>{help}</small>
+      </label>)}
      </div>
      {notice&&<p className="agent-standalone-notice">{notice}</p>}
      <div className="agent-snapshot">
        <div className="agent-snapshot-heading"><BarChart3 size={16}/> Snapshot (calculated, not market-verified)</div>
        <div className="agent-snapshot-metrics">
-        <div><span>Asking price</span><strong>{snapshot.price?INR(snapshot.price):"Missing"}</strong></div>
-        <div><span>Gross annual yield</span><strong>{ready?pct(snapshot.grossYield):"Not available"}</strong></div>
-        <div><span>Net annual yield</span><strong>{ready?pct(snapshot.netYield):"Not available"}</strong></div>
+        <div><span>Seller’s quoted price</span><strong>{snapshot.price?INR(snapshot.price):"Missing"}</strong></div>
+        <div><span>Yearly return before costs</span><strong>{ready?pct(snapshot.grossYield):"Not available"}</strong></div>
+        <div><span>Yearly return after entered costs</span><strong>{ready?pct(snapshot.netYield):"Not available"}</strong></div>
         <div><span>Risk flags</span><strong>{snapshot.risks.length}</strong></div>
        </div>
      </div>
@@ -98,6 +111,7 @@ export default function ResearchAgentPage(){
      <div className="agent-page-footnote"><ShieldCheck size={16}/> Independent legal title, RERA, approvals and comparable transactions still require verification. This is research, not personalized financial advice.</div>
     </div>
    </div>
+   </details>
   </main>
  </div>;
 }
