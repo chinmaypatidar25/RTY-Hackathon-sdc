@@ -5,6 +5,7 @@ import {Bot,Building2,ArrowLeft,ArrowRight,ShieldCheck,Landmark,BarChart3,FileSe
 import {samples,assess,INR,pct} from "../../lib/analyze";
 import AgentPanel from "../../components/AgentPanel";
 import ProjectResearch from "../../components/ProjectResearch";
+import {LoanScenario} from "../../components/InvestorTools";
 import "./research.css";
 
 const empty={name:"",location:"",assetType:"Residential apartment",price:"",monthlyRent:"",area:"",advertisedYield:"",closingCosts:"",annualExpenses:"",vacancyRate:"",rera:"",titleVerified:false,approvalsVerified:false};
@@ -108,6 +109,7 @@ export default function ResearchAgentPage(){
     <div className="agent-primary-column">
      <div className="agent-main-banner"><Bot size={23}/><div><strong>Your agent is ready to analyze the selected deal</strong><span>Ask a question below. Its calculations are based on the property shown at left.</span></div><ArrowRight size={18}/></div>
      <AgentPanel key={revision} deal={property}/>
+     <LoanScenario snapshot={snapshot}/>
      <div className="agent-page-footnote"><ShieldCheck size={16}/> Independent legal title, RERA, approvals and comparable transactions still require verification. This is research, not personalized financial advice.</div>
     </div>
    </div>

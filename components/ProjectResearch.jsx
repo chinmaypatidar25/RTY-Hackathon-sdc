@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Building2, FileSearch, LoaderCircle, ShieldCheck } from "lucide-react";
 import { INR } from "../lib/analyze.js";
 import ProjectChat from "./ProjectChat";
+import {SiteReview} from "./InvestorTools";
 
 function ResearchReport({report, onCompare}) {
   return <article className="agent-property-panel research-report" aria-label="Project case study" aria-live="polite">
@@ -118,6 +119,7 @@ export default function ProjectResearch() {
     {report && <>
       <ProjectChat key={report.name} project={report}/>
       <ResearchReport report={report} onCompare={runResearch}/>
+      <SiteReview key={report.registration} report={report}/>
     </>}
   </section>;
 }
