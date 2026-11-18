@@ -140,6 +140,10 @@ Open [http://localhost:3000](http://localhost:3000). No API key is required to r
 
 To enable OpenAI fact extraction, copy `.env.example` to `.env.local`, set `OPENAI_API_KEY`, and restart the dev server. The key is only used on the server.
 
+### Agent capabilities
+
+**Ask your investment analyst** is a tool-using property research agent integrated into the dashboard. It offers financial underwriting, rental stress testing and yield/document auditing. With `OPENAI_API_KEY` configured, an OpenAI model selects and calls the server-side tools. Without it, a labeled demo mode executes the same deterministic tools and gives an evidence-aware summary. No live comps or independent title/approval/RERA verification is performed. Expand **What the agent checked** to inspect tool results. Run `npm test` to verify the formulas and agent tool behavior.
+
 ### Demo (90 seconds)
 
 1. Click **Residential apartment** in the sidebar. It has an illustrative ₹80 lakh asking price, ₹25,000 monthly rent, and **8% advertised yield**.
