@@ -30,6 +30,10 @@ jobs:
           grep -q '"status":"ok"' /tmp/deallens-health.json
           curl --fail --silent http://127.0.0.1:3333/ -o /tmp/deallens-home.html
           grep -q 'Every property has a story' /tmp/deallens-home.html
+          curl --fail --silent http://127.0.0.1:3333/agent -o /tmp/deallens-agent.html
+          grep -q 'Meet your real-estate' /tmp/deallens-agent.html
+          curl --fail --silent http://127.0.0.1:3333/api/agent/status -o /tmp/deallens-status.json
+          grep -q '"mode":"demo"' /tmp/deallens-status.json
           curl --fail --silent -X POST http://127.0.0.1:3333/api/agent \
             -H 'Content-Type: application/json' \
             -d '{"question":"Is the advertised eight percent yield correct?","deal":{"name":"Bhopal apartment","price":8000000,"monthlyRent":25000,"advertisedYield":8,"annualExpenses":36000,"vacancyRate":5,"closingCosts":550000}}' \
