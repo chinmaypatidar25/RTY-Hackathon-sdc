@@ -131,6 +131,8 @@ See [RULES.md](RULES.md) for the full list.
 
 ### Run locally
 
+**Emergency offline demo:** If Node.js, localhost, or internet access fails during judging, open `demo/DealLens-Offline.html` directly in Windows Chrome or Edge (double-click it in File Explorer). The standalone single-file backup demonstrates the same rental yield, stress-test and risk-audit mathematics, exports an investor memo, and clearly labels its non-AI deterministic research summary. No installation, server, or API key required.
+
 **Windows one-click launch:** Open the cloned repository folder in File Explorer and double-click `Start-DealLens.bat`. The launcher checks Node.js, installs dependencies if necessary, finds an available port, waits for `/api/health` to respond, and opens the URL in your normal Windows browser. Leave the new server terminal open while presenting.
 
 **Manual alternative:**
