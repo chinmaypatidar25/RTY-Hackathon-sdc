@@ -10,7 +10,7 @@ function fallback(text){
  const price=parseMoney(text,/(?:asking\s*price|listed\s*at|priced?\s*at|price|cost|₹|rs\.?|inr)\s*[:=]?\s*(?:₹|rs\.?|inr)?\s*([\d,.]+)\s*(crores?|cr|lakhs?|lacs?|k|thousand)?/i);
  const rent=parseMoney(text,/(?:monthly\s*rent|rent\s*per\s*month|rent|rental\s*income)\s*[:=]?\s*(?:₹|rs\.?|inr)?\s*([\d,.]+)\s*(crores?|cr|lakhs?|lacs?|k|thousand)?/i);
  const area=text.match(/([\d,.]+)\s*(?:sq\.?\s*ft|square\s*feet|sqft)/i);
- const advertised=text.match(/(?:advertised|promised|claimed|guaranteed)\s*(?:annual\s*)?(?:rental\s*)?(?:yield|roi|return)[^\d]{0,12}([\d.]+)\s*%/i)||text.match(/([\d.]+)\s*%\s*(?:yield|roi|annual return)/i);
+ const advertised=text.match(/(?:advertised|advertises?|promised|claimed|guaranteed)\s*(?:annual\s*)?(?:rental\s*)?(?:yield|roi|return)[^\d]{0,12}([\d.]+)\s*%/i)||text.match(/([\d.]+)\s*%\s*(?:yield|roi|annual return)/i);
  return {price:price??"",monthlyRent:rent??"",area:area?Number(area[1].replace(/,/g,"")):"",advertisedYield:advertised?Number(advertised[1]):"",name:"Property extracted from listing"};
 }
 export async function POST(request){
