@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import {useEffect,useMemo,useState} from "react";
-import {Bot,Building2,ArrowLeft,ArrowRight,ShieldCheck,Landmark,ChartColumnIncreasing,FileSearch,LoaderCircle,AlertTriangle,CheckCircle2,Sparkles} from "lucide-react";
+import {Bot,Building2,ArrowLeft,ArrowRight,ShieldCheck,Landmark,BarChart3,FileSearch,LoaderCircle,AlertTriangle,CheckCircle2,Sparkles} from "lucide-react";
 import {samples,assess,INR,pct} from "../../lib/analyze";
 import AgentPanel from "../../components/AgentPanel";
 
@@ -72,7 +72,7 @@ export default function ResearchAgentPage(){
      </div>
      {notice&&<p className="agent-standalone-notice">{notice}</p>}
      <div className="agent-snapshot">
-       <div className="agent-snapshot-heading"><ChartColumnIncreasing size={16}/> Snapshot (calculated, not market-verified)</div>
+       <div className="agent-snapshot-heading"><BarChart3 size={16}/> Snapshot (calculated, not market-verified)</div>
        <div className="agent-snapshot-metrics">
         <div><span>Asking price</span><strong>{snapshot.price?INR(snapshot.price):"Missing"}</strong></div>
         <div><span>Gross annual yield</span><strong>{ready?pct(snapshot.grossYield):"Not available"}</strong></div>
