@@ -1,5 +1,7 @@
 # 🚀 Buildathon: Make Wednesdays Great Again
 
+**[Launch the live DealLens AI agent](https://rtyc.netlify.app/agent)** · Open directly in your browser.
+
 **Masters' Union · For AI Developers · Winner gets Rs. 25,000**
 
 > **Every team must build in a fork of this repository.** Projects not built in a fork of this repo won't be judged.
