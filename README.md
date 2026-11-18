@@ -152,6 +152,16 @@ Open [http://localhost:3000](http://localhost:3000). No API key is required to r
 
 To enable OpenAI fact extraction, copy `.env.example` to `.env.local`, set `OPENAI_API_KEY`, and restart the dev server. The key is only used on the server.
 
+### Dedicated research agent
+
+The agent now has its own page at **`/agent`**. After starting the Next.js app, open **`http://127.0.0.1:3000/agent`** in the Windows browser running on the same computer (adjust port if Next.js uses another port). It is linked from the homepage and sidebar.
+
+This page supports sample properties, editable price/rent/cost assumptions, pasted-listing extraction, direct investment questions, an expandable tool-execution trace and an explicit AI-vs-demo status indicator.
+
+- **Without `OPENAI_API_KEY`:** Deterministic demo mode returns a fixed, evidence-aware research assessment with financial tools. No model-driven reasoning occurs.
+- **With `OPENAI_API_KEY`:** The backend requests model-driven tool calling, subject to API connectivity/quotas. Key stays only in `.env.local` or private deployment settings.
+- **If opening `localhost` fails:** Make sure `npm run dev` is running and use Windows Chrome/Edge, not ChatGPT's remote browser. For a no-server backup open `demo/DealLens-Offline.html`; that offline file is NOT the AI agent.
+
 ### Agent capabilities
 
 **Ask your investment analyst** is a tool-using property research agent integrated into the dashboard. It offers financial underwriting, rental stress testing and yield/document auditing. With `OPENAI_API_KEY` configured, an OpenAI model selects and calls the server-side tools. Without it, a labeled demo mode executes the same deterministic tools and gives an evidence-aware summary. No live comps or independent title/approval/RERA verification is performed. Expand **What the agent checked** to inspect tool results. Run `npm test` to verify the formulas and agent tool behavior.
